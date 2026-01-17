@@ -52,10 +52,3 @@ Invoking go at 0x7f...
 Result: [1337] Hello, Alice (25)!
 
 ```
-
-## How It Works
-
-1. **Packing:** The loader parses your command line arguments (e.g., `int:10`) and writes them into a contiguous binary buffer, prepended by the total size.
-2. **Loading:** It reads `c.o`, allocates memory using `mmap`, and copies the ELF sections.
-3. **Linking:** It iterates through the relocation tables, calculating addresses for internal symbols and resolving external symbols (like `snprintf` used in `c.c`) against the host process.
-4. **Execution:** It jumps to the `go` entry point, passing the packed argument buffer. The payload uses `BeaconData*` helper functions to unpack the values and execute its logic.
