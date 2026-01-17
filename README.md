@@ -11,51 +11,23 @@ It simulates the "Beacon Object File" (BOF) execution model found in tools like 
 - **Symbol Resolution:** Automatically resolves external function calls (like `malloc`, `snprintf`) using the host's standard library via `dlsym`.
 - **Argument Packing:** Includes a built-in CLI argument packer that serializes arguments into a binary format compatible with the included payload parser.
 
-## File Overview
-
-- **`loader_linux_amd64.c`**: The main loader. It reads `c.o`, maps it to memory, resolves symbols, packs arguments from the command line, and executes the `go` function.
-- **`c.c`**: An example payload (BOF). It includes a small header-only parsing library to extract arguments passed by the loader and returns a formatted string.
-
 ## Building
 
 You will need `gcc` to compile both the loader and the payload.
 
-### 1. Compile the Loader
-
-The loader requires the `dl` library for dynamic symbol resolution.
-
 ```bash
-gcc loader_linux_amd64.c -o loader -ldl
-
+make
 ```
-
-### 2. Compile the Payload
-
-The payload must be compiled as a position-independent relocatable object (`.o`). **Do not link it.**
-
-```bash
-gcc -c c.c -o c.o -fPIC
-
-```
-
-> **Note:** The loader is currently hardcoded to look for a file named `c.o` in the current working directory.
 
 ## Usage
 
 Run the loader and pass arguments in the format `type:value`.
 
-The example payload (`c.c`) expects arguments in this specific order:
+The example payload (`example.c`) expects arguments in this specific order:
 
 1. **Integer** (ID)
 2. **Short** (Age)
 3. **String** (Name)
-
-### Command Syntax
-
-```bash
-./loader [arg1] [arg2] ...
-
-```
 
 ### Supported Argument Types
 
